@@ -52,7 +52,7 @@ export function AuthProvider({ children }: PropsWithChildren) {
       const normalizedEmail = email.trim().toLowerCase();
 
       if (!validarEmail(normalizedEmail)) {
-        throw new Error('Informe um e-mail válido.');
+        throw new Error('Informe um e-mail valido.');
       }
 
       if (password.trim().length < 4) {
@@ -81,7 +81,7 @@ export function AuthProvider({ children }: PropsWithChildren) {
       }
 
       if (!validarEmail(normalizedEmail)) {
-        throw new Error('Informe um e-mail válido.');
+        throw new Error('Informe um e-mail valido.');
       }
 
       if (password.trim().length < 4) {

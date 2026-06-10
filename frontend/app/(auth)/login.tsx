@@ -29,8 +29,9 @@ export default function LoginScreen() {
 
     try {
       await login(email, password);
+      router.replace('/(tabs)');
     } catch (loginError) {
-      setError(loginError instanceof Error ? loginError.message : 'Não foi possível entrar agora.');
+      setError(loginError instanceof Error ? loginError.message : 'Nao foi possivel entrar agora.');
     }
   };
 
@@ -47,7 +48,7 @@ export default function LoginScreen() {
           <View style={styles.card}>
             <View style={styles.header}>
               <CicatriaLogo />
-              <Text style={styles.subtitle}>Acompanhe suas fotos diárias com calma e clareza.</Text>
+              <Text style={styles.subtitle}>Acompanhe suas fotos diarias com calma e clareza.</Text>
             </View>
 
             <View style={styles.form}>
@@ -95,10 +96,10 @@ export default function LoginScreen() {
               </TouchableOpacity>
 
               <View style={styles.links}>
-                <TouchableOpacity onPress={() => router.push('/recuperar_senha')}>
+                <TouchableOpacity onPress={() => router.push('/(auth)/recuperar_senha')}>
                   <Text style={styles.link}>Esqueceu a senha?</Text>
                 </TouchableOpacity>
-                <TouchableOpacity onPress={() => router.push('/cadastro')}>
+                <TouchableOpacity onPress={() => router.push('/(auth)/cadastro')}>
                   <Text style={styles.link}>Criar conta</Text>
                 </TouchableOpacity>
               </View>
@@ -122,7 +123,7 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: theme.colors.background,
     justifyContent: 'center',
-    overflow: 'hidden',
+    overflow: 'visible',
     paddingHorizontal: 20,
   },
   auraTop: {
@@ -130,16 +131,16 @@ const styles = StyleSheet.create({
     borderRadius: 999,
     height: 230,
     position: 'absolute',
-    right: -70,
-    top: -45,
+    right: -44,
+    top: 0,
     width: 230,
   },
   auraBottom: {
     backgroundColor: '#BCEFFF',
     borderRadius: 999,
-    bottom: -85,
+    bottom: -34,
     height: 270,
-    left: -100,
+    left: -72,
     position: 'absolute',
     width: 270,
   },

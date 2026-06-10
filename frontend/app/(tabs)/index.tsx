@@ -63,7 +63,7 @@ export default function HomeScreen() {
           <TouchableOpacity
             accessibilityLabel="Criar novo acompanhamento"
             style={styles.iconButton}
-            onPress={() => router.push('/acompanhamento/novo')}>
+            onPress={() => router.push('/(tabs)/acompanhamento/novo')}>
             <MaterialIcons name="add-a-photo" size={22} color={theme.colors.white} />
           </TouchableOpacity>
         </View>
@@ -107,7 +107,7 @@ export default function HomeScreen() {
 
         <View style={styles.sectionHeader}>
           <Text style={styles.sectionTitle}>Registro mais recente</Text>
-          <TouchableOpacity onPress={() => router.push('/acompanhamento')}>
+          <TouchableOpacity onPress={() => router.push('/(tabs)/acompanhamento')}>
             <Text style={styles.sectionLink}>Ver todos</Text>
           </TouchableOpacity>
         </View>
@@ -132,7 +132,7 @@ export default function HomeScreen() {
 
         <View style={styles.sectionHeader}>
           <Text style={styles.sectionTitle}>Acompanhamentos</Text>
-          <TouchableOpacity onPress={() => router.push('/acompanhamento/novo')}>
+          <TouchableOpacity onPress={() => router.push('/(tabs)/acompanhamento/novo')}>
             <Text style={styles.sectionLink}>Novo</Text>
           </TouchableOpacity>
         </View>
@@ -147,7 +147,7 @@ export default function HomeScreen() {
               <TouchableOpacity
                 key={item.id}
                 style={styles.followCard}
-                onPress={() => router.push(`/acompanhamento/${item.id}`)}>
+                onPress={() => router.push(`/(tabs)/acompanhamento/${item.id}`)}>
                 <View style={styles.followIcon}>
                   <MaterialIcons
                     name={item.precisaAtencao ? 'healing' : 'health-and-safety'}

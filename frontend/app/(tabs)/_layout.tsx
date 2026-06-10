@@ -8,17 +8,21 @@ import { useColorScheme } from '@/hooks/use-color-scheme';
 import { AcompanhamentoProvider } from '@/scr/contexts/AcompanhamentoContext';
 import { useAuth } from '@/scr/contexts/AuthContext';
 
+export const unstable_settings = {
+  initialRouteName: 'index',
+};
+
 export default function TabLayout() {
   const colorScheme = useColorScheme();
   const { isAuthenticated, isBootstrapping } = useAuth();
-  const palette = Colors[colorScheme ?? 'light'];
+  const palette = Colors[(colorScheme ?? 'light') as 'light' | 'dark'];
 
   if (isBootstrapping) {
     return null;
   }
 
   if (!isAuthenticated) {
-    return <Redirect href="/login" />;
+    return <Redirect href="/(auth)/login" />;
   }
 
   return (
@@ -39,7 +43,7 @@ export default function TabLayout() {
           options={{
             href: '/(tabs)',
             title: 'Home',
-            tabBarIcon: ({ color }) => <IconSymbol size={28} name="house.fill" color={color} />,
+            tabBarIcon: ({ color }: { color: string }) => <IconSymbol size={28} name="house.fill" color={color} />,
           }}
         />
         <Tabs.Screen
@@ -58,14 +62,14 @@ export default function TabLayout() {
           name="produtos"
           options={{
             title: 'Produtos',
-            tabBarIcon: ({ color }) => <IconSymbol size={28} name="paperplane.fill" color={color} />,
+            tabBarIcon: ({ color }: { color: string }) => <IconSymbol size={28} name="paperplane.fill" color={color} />,
           }}
         />
         <Tabs.Screen
           name="configuracoes"
           options={{
             title: 'Configuracoes',
-            tabBarIcon: ({ color }) => <IconSymbol size={28} name="chevron.right" color={color} />,
+            tabBarIcon: ({ color }: { color: string }) => <IconSymbol size={28} name="chevron.right" color={color} />,
           }}
         />
       </Tabs>

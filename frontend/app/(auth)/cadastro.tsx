@@ -30,14 +30,15 @@ export default function CadastroScreen() {
     setError('');
 
     if (senha !== confirmarSenha) {
-      setError('As senhas não coincidem.');
+      setError('As senhas nao coincidem.');
       return;
     }
 
     try {
       await registrar(nome, email, senha);
+      router.replace('/(tabs)');
     } catch (registerError) {
-      setError(registerError instanceof Error ? registerError.message : 'Não foi possível criar a conta.');
+      setError(registerError instanceof Error ? registerError.message : 'Nao foi possivel criar a conta.');
     }
   };
 
@@ -46,7 +47,9 @@ export default function CadastroScreen() {
       <KeyboardAvoidingView
         style={styles.keyboardAvoiding}
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
-        <ScrollView contentContainerStyle={styles.scrollContainer}>
+        <ScrollView
+          contentContainerStyle={styles.scrollContainer}
+          showsVerticalScrollIndicator={false}>
           <View style={styles.container}>
             <View style={styles.auraTop} />
             <View style={styles.auraBottom} />
@@ -55,7 +58,7 @@ export default function CadastroScreen() {
               <View style={styles.header}>
                 <CicatriaLogo compact />
                 <Text style={styles.title}>Criar conta</Text>
-                <Text style={styles.subtitle}>Comece seu diário visual de cuidado.</Text>
+                <Text style={styles.subtitle}>Comece seu diario visual de cuidado.</Text>
               </View>
 
               <View style={styles.form}>
@@ -101,8 +104,8 @@ export default function CadastroScreen() {
                   )}
                 </TouchableOpacity>
 
-                <TouchableOpacity style={styles.link} onPress={() => router.push('/login')}>
-                  <Text style={styles.linkText}>Já tenho conta</Text>
+                <TouchableOpacity style={styles.link} onPress={() => router.replace('/(auth)/login')}>
+                  <Text style={styles.linkText}>Ja tenho conta</Text>
                 </TouchableOpacity>
               </View>
             </View>
@@ -124,13 +127,14 @@ const styles = StyleSheet.create({
   scrollContainer: {
     flexGrow: 1,
     justifyContent: 'center',
-    paddingVertical: 24,
+    paddingBottom: 42,
+    paddingTop: 34,
   },
   container: {
     flex: 1,
     backgroundColor: theme.colors.background,
     justifyContent: 'center',
-    overflow: 'hidden',
+    overflow: 'visible',
     paddingHorizontal: 20,
   },
   auraTop: {
@@ -138,16 +142,16 @@ const styles = StyleSheet.create({
     borderRadius: 999,
     height: 230,
     position: 'absolute',
-    right: -70,
-    top: -45,
+    right: -44,
+    top: 0,
     width: 230,
   },
   auraBottom: {
     backgroundColor: '#BCEFFF',
     borderRadius: 999,
-    bottom: -85,
+    bottom: -34,
     height: 270,
-    left: -100,
+    left: -72,
     position: 'absolute',
     width: 270,
   },

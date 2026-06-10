@@ -36,7 +36,7 @@ export default function RecuperarSenhaScreen() {
       <KeyboardAvoidingView
         style={styles.keyboardAvoiding}
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
-        <ScrollView contentContainerStyle={styles.scrollContainer}>
+        <ScrollView contentContainerStyle={styles.scrollContainer} showsVerticalScrollIndicator={false}>
           <View style={styles.container}>
             <View style={styles.auraTop} />
             <View style={styles.auraBottom} />
@@ -78,10 +78,10 @@ export default function RecuperarSenhaScreen() {
                   <Text style={styles.successBadge}>OK</Text>
                   <Text style={styles.successTitle}>E-mail enviado</Text>
                   <Text style={styles.successMessage}>
-                    Verifique sua caixa de entrada para seguir com a redefinição da senha.
+                    Verifique sua caixa de entrada para seguir com a redefinicao da senha.
                   </Text>
 
-                  <TouchableOpacity style={styles.button} onPress={() => router.push('/login')}>
+                  <TouchableOpacity style={styles.button} onPress={() => router.replace('/(auth)/login')}>
                     <Text style={styles.buttonText}>Voltar ao login</Text>
                   </TouchableOpacity>
                 </View>
@@ -105,13 +105,14 @@ const styles = StyleSheet.create({
   scrollContainer: {
     flexGrow: 1,
     justifyContent: 'center',
-    paddingVertical: 24,
+    paddingBottom: 42,
+    paddingTop: 34,
   },
   container: {
     flex: 1,
     backgroundColor: theme.colors.background,
     justifyContent: 'center',
-    overflow: 'hidden',
+    overflow: 'visible',
     paddingHorizontal: 20,
   },
   auraTop: {
@@ -119,16 +120,16 @@ const styles = StyleSheet.create({
     borderRadius: 999,
     height: 230,
     position: 'absolute',
-    right: -70,
-    top: -45,
+    right: -44,
+    top: 0,
     width: 230,
   },
   auraBottom: {
     backgroundColor: '#BCEFFF',
     borderRadius: 999,
-    bottom: -85,
+    bottom: -34,
     height: 270,
-    left: -100,
+    left: -72,
     position: 'absolute',
     width: 270,
   },

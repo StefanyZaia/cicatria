@@ -2,6 +2,10 @@ import { Redirect, Stack } from 'expo-router';
 
 import { useAuth } from '@/scr/contexts/AuthContext';
 
+export const unstable_settings = {
+  initialRouteName: 'login',
+};
+
 export default function AuthLayout() {
   const { isAuthenticated, isBootstrapping } = useAuth();
 
@@ -17,7 +21,10 @@ export default function AuthLayout() {
     <Stack
       screenOptions={{
         headerShown: false,
-      }}
-    />
+      }}>
+      <Stack.Screen name="login" />
+      <Stack.Screen name="cadastro" />
+      <Stack.Screen name="recuperar_senha" />
+    </Stack>
   );
 }
