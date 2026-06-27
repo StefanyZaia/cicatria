@@ -12,10 +12,10 @@ import {
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
-import CicatriaLogo from '@/scr/components/cicatriaLogo';
-import Input from '@/scr/components/Input';
-import { theme } from '@/scr/constants/theme';
-import { useAuth } from '@/scr/contexts/AuthContext';
+import CicatriaLogo from '@/src/components/cicatriaLogo';
+import Input from '@/src/components/Input';
+import { theme } from '@/src/constants/theme';
+import { useAuth } from '@/src/contexts/AuthContext';
 
 export default function CadastroScreen() {
   const [nome, setNome] = useState('');
@@ -30,7 +30,7 @@ export default function CadastroScreen() {
     setError('');
 
     if (senha !== confirmarSenha) {
-      setError('As senhas nao coincidem.');
+      setError('As senhas não coincidem.');
       return;
     }
 
@@ -38,7 +38,7 @@ export default function CadastroScreen() {
       await registrar(nome, email, senha);
       router.replace('/(tabs)');
     } catch (registerError) {
-      setError(registerError instanceof Error ? registerError.message : 'Nao foi possivel criar a conta.');
+      setError(registerError instanceof Error ? registerError.message : 'Não foi possível criar a conta.');
     }
   };
 
@@ -47,67 +47,68 @@ export default function CadastroScreen() {
       <KeyboardAvoidingView
         style={styles.keyboardAvoiding}
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
-        <ScrollView
-          contentContainerStyle={styles.scrollContainer}
-          showsVerticalScrollIndicator={false}>
-          <View style={styles.container}>
-            <View style={styles.auraTop} />
-            <View style={styles.auraBottom} />
+        <ScrollView contentContainerStyle={styles.scrollContainer} showsVerticalScrollIndicator={false}>
+          <View style={styles.hero}>
+            <TouchableOpacity style={styles.backButton} onPress={() => router.replace('/(auth)/login')}>
+              <Text style={styles.backText}>‹</Text>
+            </TouchableOpacity>
+            <View style={styles.blobA} />
+            <View style={styles.blobB} />
+          </View>
 
-            <View style={styles.card}>
-              <View style={styles.header}>
-                <CicatriaLogo compact />
-                <Text style={styles.title}>Criar conta</Text>
-                <Text style={styles.subtitle}>Comece seu diario visual de cuidado.</Text>
-              </View>
+          <View style={styles.sheet}>
+            <View style={styles.header}>
+              <CicatriaLogo compact />
+              <Text style={styles.title}>Criar conta</Text>
+              <Text style={styles.subtitle}>Comece seu diário visual de cuidado.</Text>
+            </View>
 
-              <View style={styles.form}>
-                <Input label="Nome completo" placeholder="Seu nome" value={nome} onChangeText={setNome} />
-                <Input
-                  autoCapitalize="none"
-                  autoComplete="email"
-                  keyboardType="email-address"
-                  label="E-mail"
-                  onChangeText={setEmail}
-                  placeholder="seu@email.com"
-                  value={email}
-                />
-                <Input
-                  label="Senha"
-                  onChangeText={setSenha}
-                  placeholder="Digite sua senha"
-                  secureTextEntry
-                  value={senha}
-                />
-                <Input
-                  error={error && senha !== confirmarSenha ? error : undefined}
-                  label="Confirmar senha"
-                  onChangeText={(text) => {
-                    setConfirmarSenha(text);
-                    if (error) setError('');
-                  }}
-                  placeholder="Confirme sua senha"
-                  secureTextEntry
-                  value={confirmarSenha}
-                />
+            <View style={styles.form}>
+              <Input label="Nome completo" placeholder="Seu nome" value={nome} onChangeText={setNome} />
+              <Input
+                autoCapitalize="none"
+                autoComplete="email"
+                keyboardType="email-address"
+                label="E-mail"
+                onChangeText={setEmail}
+                placeholder="seu@email.com"
+                value={email}
+              />
+              <Input
+                label="Senha"
+                onChangeText={setSenha}
+                placeholder="Digite sua senha"
+                secureTextEntry
+                value={senha}
+              />
+              <Input
+                error={error && senha !== confirmarSenha ? error : undefined}
+                label="Confirmar senha"
+                onChangeText={(text) => {
+                  setConfirmarSenha(text);
+                  if (error) setError('');
+                }}
+                placeholder="Confirme sua senha"
+                secureTextEntry
+                value={confirmarSenha}
+              />
 
-                {error && senha === confirmarSenha ? <Text style={styles.error}>{error}</Text> : null}
+              {error && senha === confirmarSenha ? <Text style={styles.error}>{error}</Text> : null}
 
-                <TouchableOpacity
-                  style={[styles.button, isLoading && styles.buttonDisabled]}
-                  onPress={handleCriarConta}
-                  disabled={isLoading}>
-                  {isLoading ? (
-                    <ActivityIndicator color={theme.colors.white} />
-                  ) : (
-                    <Text style={styles.buttonText}>Criar conta</Text>
-                  )}
-                </TouchableOpacity>
+              <TouchableOpacity
+                style={[styles.button, isLoading && styles.buttonDisabled]}
+                onPress={handleCriarConta}
+                disabled={isLoading}>
+                {isLoading ? (
+                  <ActivityIndicator color={theme.colors.white} />
+                ) : (
+                  <Text style={styles.buttonText}>Criar conta</Text>
+                )}
+              </TouchableOpacity>
 
-                <TouchableOpacity style={styles.link} onPress={() => router.replace('/(auth)/login')}>
-                  <Text style={styles.linkText}>Ja tenho conta</Text>
-                </TouchableOpacity>
-              </View>
+              <TouchableOpacity style={styles.link} onPress={() => router.replace('/(auth)/login')}>
+                <Text style={styles.linkText}>Ja tenho conta</Text>
+              </TouchableOpacity>
             </View>
           </View>
         </ScrollView>
@@ -126,63 +127,74 @@ const styles = StyleSheet.create({
   },
   scrollContainer: {
     flexGrow: 1,
-    justifyContent: 'center',
-    paddingBottom: 42,
-    paddingTop: 34,
+    paddingBottom: 26,
   },
-  container: {
+  hero: {
+    backgroundColor: theme.colors.primary,
+    borderBottomLeftRadius: 52,
+    minHeight: 180,
+    overflow: 'hidden',
+  },
+  backButton: {
+    alignItems: 'center',
+    backgroundColor: 'rgba(255,255,255,0.28)',
+    borderRadius: 999,
+    height: 36,
+    justifyContent: 'center',
+    left: 22,
+    position: 'absolute',
+    top: 28,
+    width: 36,
+    zIndex: 2,
+  },
+  backText: {
+    color: theme.colors.white,
+    fontSize: 30,
+    fontWeight: '700',
+    lineHeight: 32,
+  },
+  blobA: {
+    backgroundColor: 'rgba(255,255,255,0.2)',
+    borderRadius: 999,
+    height: 104,
+    left: -24,
+    position: 'absolute',
+    top: -28,
+    width: 104,
+  },
+  blobB: {
+    backgroundColor: 'rgba(141,232,255,0.35)',
+    borderRadius: 999,
+    height: 164,
+    position: 'absolute',
+    right: -42,
+    top: 36,
+    width: 164,
+  },
+  sheet: {
+    backgroundColor: theme.colors.surface,
+    borderTopRightRadius: 52,
     flex: 1,
-    backgroundColor: theme.colors.background,
-    justifyContent: 'center',
-    overflow: 'visible',
-    paddingHorizontal: 20,
-  },
-  auraTop: {
-    backgroundColor: '#B8F4E1',
-    borderRadius: 999,
-    height: 230,
-    position: 'absolute',
-    right: -44,
-    top: 0,
-    width: 230,
-  },
-  auraBottom: {
-    backgroundColor: '#BCEFFF',
-    borderRadius: 999,
-    bottom: -34,
-    height: 270,
-    left: -72,
-    position: 'absolute',
-    width: 270,
-  },
-  card: {
-    backgroundColor: theme.colors.surfaceGlass,
-    borderColor: 'rgba(255,255,255,0.92)',
-    borderRadius: 28,
-    borderWidth: 1,
-    elevation: 8,
+    marginTop: -54,
+    minHeight: 610,
     paddingHorizontal: 24,
-    paddingVertical: 30,
-    shadowColor: theme.colors.primaryDark,
-    shadowOffset: { width: 0, height: 14 },
-    shadowOpacity: 0.12,
-    shadowRadius: 24,
+    paddingTop: 32,
   },
   header: {
     alignItems: 'center',
     marginBottom: 24,
   },
   title: {
-    color: theme.colors.text,
-    fontSize: 24,
-    fontWeight: '800',
+    color: theme.colors.primaryDark,
+    fontSize: 27,
+    fontWeight: '900',
     marginTop: 8,
   },
   subtitle: {
     color: theme.colors.textLight,
-    fontSize: 15,
-    fontWeight: '600',
-    marginTop: 4,
+    fontSize: 14,
+    fontWeight: '700',
+    marginTop: 5,
     textAlign: 'center',
   },
   form: {
@@ -191,14 +203,16 @@ const styles = StyleSheet.create({
   error: {
     color: theme.colors.error,
     fontSize: 13,
-    fontWeight: '600',
+    fontWeight: '700',
+    textAlign: 'center',
   },
   button: {
     alignItems: 'center',
     backgroundColor: theme.colors.primary,
-    borderRadius: 16,
+    borderRadius: 999,
     marginTop: 8,
-    paddingVertical: 15,
+    minHeight: 54,
+    justifyContent: 'center',
     width: '100%',
   },
   buttonDisabled: {
@@ -207,15 +221,15 @@ const styles = StyleSheet.create({
   buttonText: {
     color: theme.colors.white,
     fontSize: 16,
-    fontWeight: '800',
+    fontWeight: '900',
   },
   link: {
     alignItems: 'center',
     marginTop: 16,
   },
   linkText: {
-    color: theme.colors.primaryDark,
+    color: theme.colors.primary,
     fontSize: 14,
-    fontWeight: '700',
+    fontWeight: '900',
   },
 });

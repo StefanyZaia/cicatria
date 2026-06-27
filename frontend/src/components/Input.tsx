@@ -7,7 +7,7 @@ import {
   View,
 } from 'react-native';
 
-import { theme } from '@/scr/constants/theme';
+import { theme } from '@/src/constants/theme';
 
 type InputProps = TextInputProps & {
   error?: string;
@@ -33,19 +33,20 @@ const styles = StyleSheet.create({
     gap: 7,
   },
   label: {
-    color: theme.colors.text,
+    color: theme.colors.primaryDark,
     fontSize: 13,
-    fontWeight: '700',
+    fontWeight: '800',
   },
   input: {
-    backgroundColor: theme.colors.surface,
-    borderColor: theme.colors.border,
-    borderRadius: 16,
-    borderWidth: 1.5,
+    backgroundColor: theme.colors.surfaceTint,
+    borderColor: '#D9EEE9',
+    borderRadius: 999,
+    borderWidth: 1,
     color: theme.colors.text,
-    fontSize: 16,
+    fontSize: 15,
+    fontWeight: '700',
     minHeight: 52,
-    paddingHorizontal: 16,
+    paddingHorizontal: 18,
   },
   inputError: {
     borderColor: theme.colors.error,

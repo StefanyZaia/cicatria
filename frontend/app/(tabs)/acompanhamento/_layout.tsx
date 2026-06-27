@@ -1,24 +1,18 @@
 import { Stack } from 'expo-router';
 
-import { theme } from '@/scr/constants/theme';
+export const unstable_settings = {
+  initialRouteName: 'index',
+};
 
 export default function AcompanhamentoStackLayout() {
   return (
     <Stack
       screenOptions={{
-        headerShadowVisible: false,
-        headerStyle: {
-          backgroundColor: theme.colors.surface,
-        },
-        headerTintColor: theme.colors.primary,
-        headerTitleStyle: {
-          color: theme.colors.text,
-          fontWeight: '700',
-        },
+        headerShown: false,
       }}>
-      <Stack.Screen name="index" options={{ title: 'Acompanhamentos' }} />
-      <Stack.Screen name="novo" options={{ title: 'Novo registro' }} />
-      <Stack.Screen name="[id]" options={{ title: 'Editar registro' }} />
+      <Stack.Screen name="index" />
+      <Stack.Screen name="novo" />
+      <Stack.Screen name="[id]" />
     </Stack>
   );
 }

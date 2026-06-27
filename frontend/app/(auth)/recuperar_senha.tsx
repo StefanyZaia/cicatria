@@ -11,9 +11,9 @@ import {
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
-import CicatriaLogo from '@/scr/components/cicatriaLogo';
-import Input from '@/scr/components/Input';
-import { theme } from '@/scr/constants/theme';
+import CicatriaLogo from '@/src/components/cicatriaLogo';
+import Input from '@/src/components/Input';
+import { theme } from '@/src/constants/theme';
 
 export default function RecuperarSenhaScreen() {
   const [email, setEmail] = useState('');
@@ -78,7 +78,7 @@ export default function RecuperarSenhaScreen() {
                   <Text style={styles.successBadge}>OK</Text>
                   <Text style={styles.successTitle}>E-mail enviado</Text>
                   <Text style={styles.successMessage}>
-                    Verifique sua caixa de entrada para seguir com a redefinicao da senha.
+                    Verifique sua caixa de entrada para seguir com a redefinição da senha.
                   </Text>
 
                   <TouchableOpacity style={styles.button} onPress={() => router.replace('/(auth)/login')}>

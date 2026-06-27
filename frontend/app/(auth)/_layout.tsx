@@ -1,6 +1,6 @@
 import { Redirect, Stack } from 'expo-router';
 
-import { useAuth } from '@/scr/contexts/AuthContext';
+import { useAuth } from '@/src/contexts/AuthContext';
 
 export const unstable_settings = {
   initialRouteName: 'login',

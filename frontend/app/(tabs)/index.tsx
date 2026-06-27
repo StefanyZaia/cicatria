@@ -3,9 +3,10 @@ import { useRouter } from 'expo-router';
 import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
-import { theme } from '@/scr/constants/theme';
-import { useAcompanhamentos } from '@/scr/contexts/AcompanhamentoContext';
-import { useAuth } from '@/scr/contexts/AuthContext';
+import JellyfishScene from '@/src/components/JellyfishScene';
+import { theme } from '@/src/constants/theme';
+import { useAcompanhamentos } from '@/src/contexts/AcompanhamentoContext';
+import { useAuth } from '@/src/contexts/AuthContext';
 
 function formatarData(data?: string) {
   if (!data) {
@@ -24,14 +25,18 @@ function corDaDor(dor?: number) {
   }
 
   if (dor >= 7) {
-    return '#E05252';
+    return theme.colors.error;
   }
 
   if (dor >= 4) {
-    return '#E09B3D';
+    return theme.colors.warning;
   }
 
   return theme.colors.success;
+}
+
+function formatarVermelhidao(vermelhidao?: string) {
+  return vermelhidao ?? 'não informada';
 }
 
 export default function HomeScreen() {
@@ -42,6 +47,7 @@ export default function HomeScreen() {
     acompanhamentos,
     totalAtivos,
     ultimoRegistro,
+    ultimoRegistroAcompanhamentoId,
     totalComAtencao,
     proximoRetorno,
   } = useAcompanhamentos();
@@ -52,17 +58,22 @@ export default function HomeScreen() {
   return (
     <View style={styles.screen}>
       <ScrollView
-        contentContainerStyle={[styles.content, { paddingTop: insets.top + 18 }]}
+        contentContainerStyle={[
+          styles.content,
+          { paddingBottom: Math.max(insets.bottom + 118, 142), paddingTop: insets.top + 18 },
+        ]}
         showsVerticalScrollIndicator={false}>
-        <View style={styles.header}>
-          <View>
+        <View style={styles.heroCard}>
+          <View style={styles.heroBlob} />
+          <View style={styles.heroTextWrap}>
             <Text style={styles.kicker}>Cicatria</Text>
             <Text style={styles.title}>Olá, {user?.nome ?? 'Paciente'}</Text>
+            <Text style={styles.heroBody}>Sua rotina de cuidado visual esta organizada.</Text>
           </View>
-
+          <JellyfishScene compact />
           <TouchableOpacity
             accessibilityLabel="Criar novo acompanhamento"
-            style={styles.iconButton}
+            style={styles.floatingButton}
             onPress={() => router.push('/(tabs)/acompanhamento/novo')}>
             <MaterialIcons name="add-a-photo" size={22} color={theme.colors.white} />
           </TouchableOpacity>
@@ -71,19 +82,19 @@ export default function HomeScreen() {
         <View style={[styles.notice, precisaAtencao ? styles.noticeWarning : styles.noticeCalm]}>
           <View style={styles.noticeIcon}>
             <MaterialIcons
-              name={precisaAtencao ? 'priority-high' : 'check'}
+              name={precisaAtencao ? 'priority-high' : 'water-drop'}
               size={20}
-              color={precisaAtencao ? '#A75B00' : theme.colors.primaryDark}
+              color={precisaAtencao ? theme.colors.warning : theme.colors.primary}
             />
           </View>
           <View style={styles.noticeText}>
             <Text style={styles.noticeTitle}>
-              {precisaAtencao ? 'Há acompanhamento pedindo atenção' : 'Tudo está estável hoje'}
+              {precisaAtencao ? 'Acompanhamento pedindo atenção' : 'Tudo estável hoje'}
             </Text>
             <Text style={styles.noticeBody}>
               {precisaAtencao
                 ? 'Revise os registros recentes e mantenha o acompanhamento diário.'
-                : 'Continue registrando uma foto por dia para manter a evolução organizada.'}
+                : 'Continue registrando uma foto por dia para ver a evolução.'}
             </Text>
           </View>
         </View>
@@ -106,15 +117,23 @@ export default function HomeScreen() {
         </View>
 
         <View style={styles.sectionHeader}>
-          <Text style={styles.sectionTitle}>Registro mais recente</Text>
+          <Text style={styles.sectionTitle}>Registro recente</Text>
           <TouchableOpacity onPress={() => router.push('/(tabs)/acompanhamento')}>
             <Text style={styles.sectionLink}>Ver todos</Text>
           </TouchableOpacity>
         </View>
 
-        <View style={styles.latestCard}>
+        <TouchableOpacity
+          activeOpacity={0.84}
+          disabled={!ultimoRegistroAcompanhamentoId}
+          style={styles.latestCard}
+          onPress={() => {
+            if (ultimoRegistroAcompanhamentoId) {
+              router.push(`/(tabs)/acompanhamento/${ultimoRegistroAcompanhamentoId}`);
+            }
+          }}>
           <View style={styles.photoPlaceholder}>
-            <MaterialIcons name="image-search" size={28} color={theme.colors.primaryDark} />
+            <MaterialIcons name="image-search" size={28} color={theme.colors.primary} />
           </View>
           <View style={styles.latestContent}>
             <Text style={styles.latestDate}>{formatarData(ultimoRegistro?.data)}</Text>
@@ -125,10 +144,11 @@ export default function HomeScreen() {
               </Text>
             </Text>
             <Text style={styles.latestMeta}>
-              Vermelhidão {ultimoRegistro?.vermelhidao ?? 'não informada'}
+              Vermelhidão {formatarVermelhidao(ultimoRegistro?.vermelhidao)}
             </Text>
           </View>
-        </View>
+          <MaterialIcons name="chevron-right" size={24} color={theme.colors.textLight} />
+        </TouchableOpacity>
 
         <View style={styles.sectionHeader}>
           <Text style={styles.sectionTitle}>Acompanhamentos</Text>
@@ -152,13 +172,13 @@ export default function HomeScreen() {
                   <MaterialIcons
                     name={item.precisaAtencao ? 'healing' : 'health-and-safety'}
                     size={23}
-                    color={item.precisaAtencao ? '#C06B00' : theme.colors.primaryDark}
+                    color={item.precisaAtencao ? theme.colors.warning : theme.colors.primary}
                   />
                 </View>
                 <View style={styles.followContent}>
                   <Text style={styles.followTitle}>{item.titulo}</Text>
                   <Text style={styles.followMeta}>
-                    {item.local} · último registro {formatarData(ultimo?.data)}
+                    {item.local} - ultimo registro {formatarData(ultimo?.data)}
                   </Text>
                 </View>
                 <MaterialIcons name="chevron-right" size={24} color={theme.colors.textLight} />
@@ -174,61 +194,86 @@ export default function HomeScreen() {
 const styles = StyleSheet.create({
   screen: {
     flex: 1,
-    backgroundColor: theme.colors.background,
+    backgroundColor: theme.colors.backgroundDeep,
   },
   content: {
-    paddingBottom: 34,
-    paddingHorizontal: 20,
+    paddingHorizontal: 18,
   },
-  header: {
-    alignItems: 'center',
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    marginBottom: 20,
+  heroCard: {
+    backgroundColor: theme.colors.surface,
+    borderRadius: 28,
+    minHeight: 178,
+    marginBottom: 16,
+    overflow: 'hidden',
+    padding: 18,
+    shadowColor: '#16454A',
+    shadowOffset: { width: 0, height: 12 },
+    shadowOpacity: 0.12,
+    shadowRadius: 22,
+  },
+  heroBlob: {
+    backgroundColor: theme.colors.backgroundBlue,
+    borderRadius: 999,
+    height: 180,
+    position: 'absolute',
+    right: -58,
+    top: -46,
+    width: 180,
+  },
+  heroTextWrap: {
+    maxWidth: 220,
+    zIndex: 2,
   },
   kicker: {
-    color: theme.colors.primaryDark,
-    fontSize: 14,
-    fontWeight: '800',
+    color: theme.colors.primary,
+    fontSize: 13,
+    fontWeight: '900',
   },
   title: {
     color: theme.colors.text,
-    fontSize: 28,
-    fontWeight: '800',
-    marginTop: 2,
+    fontSize: 27,
+    fontWeight: '900',
+    lineHeight: 31,
+    marginTop: 4,
   },
-  iconButton: {
+  heroBody: {
+    color: theme.colors.textLight,
+    fontSize: 14,
+    fontWeight: '700',
+    lineHeight: 20,
+    marginTop: 8,
+  },
+  floatingButton: {
     alignItems: 'center',
     backgroundColor: theme.colors.primary,
-    borderRadius: 18,
+    borderRadius: 999,
+    bottom: 16,
     height: 48,
     justifyContent: 'center',
-    shadowColor: theme.colors.primaryDark,
-    shadowOffset: { width: 0, height: 8 },
-    shadowOpacity: 0.18,
-    shadowRadius: 14,
+    position: 'absolute',
+    right: 16,
     width: 48,
   },
   notice: {
-    borderRadius: 18,
+    borderRadius: 22,
     flexDirection: 'row',
     gap: 12,
-    marginBottom: 16,
-    padding: 16,
+    marginBottom: 14,
+    padding: 15,
   },
   noticeCalm: {
-    backgroundColor: '#DDF9EE',
+    backgroundColor: '#E8FFF7',
   },
   noticeWarning: {
-    backgroundColor: '#FFF0D8',
+    backgroundColor: '#FFF1DD',
   },
   noticeIcon: {
     alignItems: 'center',
-    backgroundColor: 'rgba(255,255,255,0.68)',
+    backgroundColor: 'rgba(255,255,255,0.72)',
     borderRadius: 999,
-    height: 36,
+    height: 38,
     justifyContent: 'center',
-    width: 36,
+    width: 38,
   },
   noticeText: {
     flex: 1,
@@ -236,24 +281,24 @@ const styles = StyleSheet.create({
   noticeTitle: {
     color: theme.colors.text,
     fontSize: 15,
-    fontWeight: '800',
+    fontWeight: '900',
   },
   noticeBody: {
     color: theme.colors.textLight,
     fontSize: 13,
-    fontWeight: '600',
+    fontWeight: '700',
     lineHeight: 19,
-    marginTop: 4,
+    marginTop: 3,
   },
   metricsGrid: {
     flexDirection: 'row',
     gap: 10,
-    marginBottom: 24,
+    marginBottom: 22,
   },
   metricCard: {
-    backgroundColor: theme.colors.surfaceGlass,
-    borderColor: 'rgba(255,255,255,0.86)',
-    borderRadius: 18,
+    backgroundColor: 'rgba(248,255,252,0.92)',
+    borderColor: 'rgba(255,255,255,0.8)',
+    borderRadius: 22,
     borderWidth: 1,
     flex: 1,
     paddingHorizontal: 12,
@@ -261,16 +306,16 @@ const styles = StyleSheet.create({
   },
   metricValue: {
     color: theme.colors.text,
-    fontSize: 20,
+    fontSize: 19,
     fontWeight: '900',
   },
   metricAlert: {
-    color: '#C06B00',
+    color: theme.colors.warning,
   },
   metricLabel: {
     color: theme.colors.textLight,
     fontSize: 12,
-    fontWeight: '700',
+    fontWeight: '800',
     marginTop: 4,
   },
   sectionHeader: {
@@ -280,30 +325,30 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   sectionTitle: {
-    color: theme.colors.text,
+    color: theme.colors.white,
     fontSize: 18,
-    fontWeight: '800',
+    fontWeight: '900',
   },
   sectionLink: {
-    color: theme.colors.primaryDark,
+    color: '#E8FFF7',
     fontSize: 14,
-    fontWeight: '800',
+    fontWeight: '900',
   },
   latestCard: {
     alignItems: 'center',
     backgroundColor: theme.colors.surface,
-    borderColor: theme.colors.border,
-    borderRadius: 20,
+    borderColor: 'rgba(255,255,255,0.8)',
+    borderRadius: 24,
     borderWidth: 1,
     flexDirection: 'row',
     gap: 14,
-    marginBottom: 24,
+    marginBottom: 22,
     padding: 14,
   },
   photoPlaceholder: {
     alignItems: 'center',
     backgroundColor: theme.colors.backgroundBlue,
-    borderRadius: 18,
+    borderRadius: 22,
     height: 76,
     justifyContent: 'center',
     width: 76,
@@ -312,9 +357,9 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   latestDate: {
-    color: theme.colors.primaryDark,
+    color: theme.colors.primary,
     fontSize: 13,
-    fontWeight: '800',
+    fontWeight: '900',
     marginBottom: 4,
   },
   latestTitle: {
@@ -325,7 +370,7 @@ const styles = StyleSheet.create({
   latestMeta: {
     color: theme.colors.textLight,
     fontSize: 13,
-    fontWeight: '600',
+    fontWeight: '700',
     marginTop: 4,
   },
   list: {
@@ -334,8 +379,8 @@ const styles = StyleSheet.create({
   followCard: {
     alignItems: 'center',
     backgroundColor: theme.colors.surface,
-    borderColor: theme.colors.border,
-    borderRadius: 18,
+    borderColor: 'rgba(255,255,255,0.8)',
+    borderRadius: 23,
     borderWidth: 1,
     flexDirection: 'row',
     gap: 12,
@@ -344,10 +389,10 @@ const styles = StyleSheet.create({
   followIcon: {
     alignItems: 'center',
     backgroundColor: theme.colors.backgroundBlue,
-    borderRadius: 15,
-    height: 44,
+    borderRadius: 18,
+    height: 46,
     justifyContent: 'center',
-    width: 44,
+    width: 46,
   },
   followContent: {
     flex: 1,
@@ -355,12 +400,12 @@ const styles = StyleSheet.create({
   followTitle: {
     color: theme.colors.text,
     fontSize: 15,
-    fontWeight: '800',
+    fontWeight: '900',
   },
   followMeta: {
     color: theme.colors.textLight,
     fontSize: 12,
-    fontWeight: '600',
+    fontWeight: '700',
     marginTop: 3,
   },
 });
